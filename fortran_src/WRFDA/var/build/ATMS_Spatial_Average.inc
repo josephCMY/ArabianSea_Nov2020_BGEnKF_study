@@ -1,0 +1,1 @@
+../da/da_radiance/ATMS_Spatial_Average.inc

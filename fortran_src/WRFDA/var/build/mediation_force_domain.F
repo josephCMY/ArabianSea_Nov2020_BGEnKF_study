@@ -1,0 +1,1 @@
+../../share/mediation_force_domain.F

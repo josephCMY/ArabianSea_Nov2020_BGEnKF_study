@@ -1,0 +1,1 @@
+../da/da_define_structures/da_allocate_observations_rain.inc

@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Configuration for setting up obs for reanalysis 
+
+# Start and end date for setup
+date_st=201708010000   #201707110000
+date_ed=201709010000
+
+# DA cycling interval in minutes
+cyc_int=60
+
+# Controls for obsproc
+IPROJ=3   # For mercator projection
+MINUTES_PER_SLOT=60
+OBS_WIN_MIN=-30
+OBS_WIN_MAX=30
+
+
+
+
+# Function to advance time 
+function advance_time {
+  ccyymmdd=`echo $1 |cut -c1-8`
+  hh=`echo $1 |cut -c9-10`
+  mm=`echo $1 |cut -c11-12`
+  inc=$2
+  date -u -d $inc' minutes '$ccyymmdd' '$hh':'$mm +%Y%m%d%H%M
+}
+export -f advance_time
+

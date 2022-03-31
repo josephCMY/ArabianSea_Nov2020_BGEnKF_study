@@ -1,0 +1,1 @@
+../da/da_setup_structures/da_get_bins_info.inc

@@ -1,0 +1,99 @@
+&record1
+ obs_gts_filename = 'obs.raw',
+ obs_err_filename = 'obserr.txt',
+/
+
+&record2
+ time_window_min  = '2017-08-31_23:30:00',
+ time_analysis    = '2017-09-01_00:00:00',
+ time_window_max  = '2017-09-01_00:30:00',
+/
+
+&record3
+ max_number_of_obs        = 400000,
+ fatal_if_exceed_max_obs  = .FALSE.,
+/
+
+&record4
+ qc_test_vert_consistency = .true.,
+ qc_test_convective_adj   = .true.,
+ qc_test_above_lid        = .true.,
+ remove_above_lid         = .true.,
+ domain_check_h           = .true.,
+ Thining_SATOB            = .false.,
+ Thining_SSMI             = .false.,
+ Thining_QSCAT            = .false.,
+/
+
+&record5
+ print_gts_read           = .true.,
+ print_gpspw_read         = .true.,
+ print_recoverp           = .true.,
+ print_duplicate_loc      = .true.,
+ print_duplicate_time     = .true.,
+ print_recoverh           = .true.,
+ print_qc_vert            = .true.,
+ print_qc_conv            = .true.,
+ print_qc_lid             = .true.,
+ print_uncomplete         = .true.,
+/
+
+&record6
+ ptop =  2000,
+ base_pres       = 100000.0,
+ base_temp       = 290.0,
+ base_lapse      = 50.0,
+ base_strat_temp = 215.0,
+ base_tropo_pres = 20000.0
+/
+
+&record7
+ IPROJ = 3,
+ PHIC  = 12.0,
+ XLONC = 100.0,
+ TRUELAT1= 40.0,
+ TRUELAT2= -20.0,
+ MOAD_CEN_LAT = 12.0,
+ STANDARD_LON = 100.0,
+/
+
+&record8
+ IDD    =   1,
+ MAXNES =   1,
+ NESTIX = 840,
+ NESTJX = 1000,
+ DIS    = 9,
+ NUMC   =    1,
+ NESTI  =    1,
+ NESTJ  =    1,
+ / 
+
+&record9
+ OUTPUT_OB_FORMAT = 2
+ use_for          = '3DVAR',
+ num_slots_past   = 0,
+ num_slots_ahead  = 0,
+ write_synop = .true., 
+ write_ship  = .true.,
+ write_metar = .true.,
+ write_buoy  = .true., 
+ write_pilot = .true.,
+ write_sound = .true.,
+ write_amdar = .true.,
+ write_satem = .true.,
+ write_satob = .true.,
+ write_airep = .true.,
+ write_gpspw = .true.,
+ write_gpsztd= .true.,
+ write_gpsref= .true.,
+ write_gpseph= .true.,
+ write_ssmt1 = .true.,
+ write_ssmt2 = .true.,
+ write_ssmi  = .true.,
+ write_tovs  = .true.,
+ write_qscat = .true.,
+ write_profl = .true.,
+ write_bogus = .true.,
+ write_airs  = .true.,
+ /
+

@@ -1,0 +1,43 @@
+NETCDF_INC=${HOME}/include
+NETCDF_LIB=${HOME}/lib
+CRTM_DIR=../crtm_v2.3.0
+FCFLAG=-f90=ifort  -i4 -w -ftz -align all -fno-alias -fp-model precise -assume realloc_lhs -convert little_endian -traceback 
+qn2re: qn2re_wsm6.o qn2re_gfdlfv3.o  qn2re_thompson08.o
+	ar cr libqn2re.a qn2re_gfdlfv3.o qn2re_wsm6.o qn2re_thompson08.o
+
+convert: lut_crtm2ds.exe
+	./lut_crtm2ds.exe
+
+nc: test_nc.exe
+	./test_nc.exe
+
+all: qn2re_wsm6.o qn2re_gfdlfv3.o test.exe
+	./test.exe
+
+lut_crtm2ds.exe: lut_crtm2ds.o
+	mpif90  lut_crtm2ds.o  ${FCFLAG} -I$(CRTM_DIR)/include -L$(CRTM_DIR)/lib -lcrtm  -o lut_crtm2ds.exe 
+
+lut_crtm2ds.o: lut_crtm2ds.f90
+	mpif90 -c ${FCFLAG} -I$(CRTM_DIR)/include lut_crtm2ds.f90
+
+test_nc.exe: test_nc.f90 lut_nc2crtm.o
+	mpif90 -o test_nc.exe  lut_nc2crtm.o ${FCFLAG} -I$(NETCDF_INC) -L$(NETCDF_LIB) -lnetcdff -I$(CRTM_DIR)/include -L$(CRTM_DIR)/lib -lcrtm test_nc.f90
+
+lut_nc2crtm.o: lut_nc2crtm.f90
+	mpif90  -c ${FCFLAG} -I$(NETCDF_INC) -I$(CRTM_DIR)/include lut_nc2crtm.f90
+
+test.exe: test.f90 qn2re_wsm6.o qn2re_gfdlfv3.o
+	mpif90 -o test.exe ${FCFLAG} qn2re_wsm6.o qn2re_gfdlfv3.o test.f90
+
+qn2re_wsm6.o: qn2re_wsm6.f90
+	mpif90  -c ${FCFLAG} qn2re_wsm6.f90
+
+qn2re_gfdlfv3.o: qn2re_gfdlfv3.f90
+	mpif90  -c ${FCFLAG} qn2re_gfdlfv3.f90
+	
+qn2re_thompson08.o: qn2re_thompson08.f90
+	mpif90  -c ${FCFLAG} qn2re_thompson08.f90
+
+clean:
+	rm *.mod *.o *.exe
+

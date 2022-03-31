@@ -1,0 +1,1 @@
+../da/da_synop/da_check_buddy_synop.inc

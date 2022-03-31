@@ -1,0 +1,1 @@
+../da/da_define_structures/da_zero_vp_type.inc

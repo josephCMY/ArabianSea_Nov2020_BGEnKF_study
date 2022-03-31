@@ -1,0 +1,9 @@
+src_crtm:     Three CRTM source code files that are modified.
+src_re:       Functions that calculate effective radius of hydrometer particles
+              from air density, mixing ratio, and temperature.
+coefficients: LUTs specifically generated for WSM6 microphysical scheme
+              using scattering properties calculated from spherical particles
+              using Mie scattering code. Little_endian
+
+Note: for 183 GHz channels, need to use 16 streams.
+

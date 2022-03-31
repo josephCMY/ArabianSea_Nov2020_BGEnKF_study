@@ -1,0 +1,1 @@
+../../share/start_domain.F

@@ -1,0 +1,77 @@
+# Configuration file to setup ensemble for the PSU-EnKF
+
+
+# SECTION 1: Date range of case study (in terms of ccyymmddHHMM)
+# -------------------------------------------------------------
+# These dates must be at 0000 UTC, 0600 UTC, 1200 UTC or 1800 UTC
+DATE_START=201705300000 # Start date: 2017 May 30 0000 UTC
+DATE_END=201705310000   #   End date: 2017 May 31 0000 UTC
+GEFS_TIME_INTERVAL=6 	# Time interval at which GEFS forecasts are made.
+
+
+
+
+
+# SECTION 2: Ensemble settings
+# ----------------------------
+# NOTES: GEFS_SIZE varies depending on year. Check the AWS website
+#        https://noaa-gefs-pds.s3.amazonaws.com/index.html to find
+#        out.
+
+ENSEMBLE_SIZE=10        # Want 10 ensemble members for PSU-EnKF
+GEFS_SIZE=20		# Number of members available in the GEFS
+
+
+
+
+
+
+# SECTION 3: NOAA AWS path format
+# -------------------------------
+# The directory path format on AWS changes from date to date
+#
+# As such, there's a need to specify the file path format.
+#
+# Check https://noaa-gefs-pds.s3.amazonaws.com/index.html to see the
+# directory path format you want.
+# 
+# In the prescribed format strings, the get_GEFS.sh script will 
+# automatically replace
+# 1) "ccyymmdd" with forecast initiation date's year month day
+# 2) "HH" with forecast initiation date's hour
+# 3) "LL" with the forecast lead time in hours.
+# 4) "ID" with the GEFS forecast member ID
+#
+# File paths are needed for .pgrba and pgrbb files.
+
+# Path formats that works for 2017
+PGRB2A_PATH_FORMAT="noaa-gefs-pds/gefs.ccyymmdd/HH/gepID.tHHz.pgrb2afLL"
+PGRB2B_PATH_FORMAT="noaa-gefs-pds/gefs.ccyymmdd/HH/gepID.tHHz.pgrb2bfLL"
+
+# # Path formats might work for 2022 (untested)
+# PGRB2A_PATH_FORMAT="noaa-gefs-pds/gefs.ccyymmdd/HH/atmos/pgrb2ap5/gepID.tHHz.pgrb2a.0p50.fLL"
+# PGRB2B_PATH_FORMAT="noaa-gefs-pds/gefs.ccyymmdd/HH/atmos/pgrb2bp5/gepID.tHHz.pgrb2b.0p50.fLL"
+
+
+
+
+
+# SECTION 3: Directory paths to store stuff
+# ------------------------------------------
+RAW_GEFS_DIR=$SCRATCH/test_gefs_processing/gefs_raw_files  # Directory to store raw GEFS GRIB files
+WPS_GEFS_DIR=$SCRATCH/test_gefs_processing/gefs_wps_apply  # Directory to convert GEFS GRIB files to WRF files
+
+
+
+
+
+# SECTION 4: Paths to items needed to convert GEFS GRIB to wrfinput files
+# -----------------------------------------------------------------------
+WPS_DIR=~/PSU-EnKF_w_satellites/system_types/barebones/setup_ens/gefs_based_ens/fortran_src/WPS			# Directory containing compiled WPS programs
+WRF_DIR=~/PSU-EnKF_w_satellites/system_types/barebones/setup_ens/gefs_based_ens/fortran_src/WRFV3		# Directory containing compiled WRF program
+WPS_NAMELIST=~/PSU-EnKF_w_satellites/system_types/barebones/setup_ens/gefs_based_ens/namelist.wps		# Path to WPS-regulating namelist.
+UNGRIB_VTABLE=$WPS_DIR/ungrib/Variable_Tables/Vtable.GFSENS							# Path to Vtable needed to ungrib GEFS GRIB files
+WRF_REAL_NAMELIST=~/PSU-EnKF_w_satellites/system_types/barebones/setup_ens/gefs_based_ens/namelist.real		# Path to namelist regulating WRF/real.exe
+WRF_SPINUP_NAMELIST=~/PSU-EnKF_w_satellites/system_types/barebones/setup_ens/gefs_based_ens/namelist.spinup
+
+

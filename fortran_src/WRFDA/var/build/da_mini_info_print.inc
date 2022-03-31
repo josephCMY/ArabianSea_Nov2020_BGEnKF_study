@@ -1,0 +1,1 @@
+../da/da_obs/da_mini_info_print.inc

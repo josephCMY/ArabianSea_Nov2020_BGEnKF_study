@@ -1,0 +1,1 @@
+../da/da_radiance/da_residual_rad.inc

@@ -1,0 +1,1 @@
+../da/da_ssmi/da_read_ssmi_integer_array.inc

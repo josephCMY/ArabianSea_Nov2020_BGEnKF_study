@@ -1,0 +1,264 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+REAL FUNCTION GAMMA1(X)
+   use da_control, only : pi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      INTEGER I,N
+      LOGICAL PARITY
+
+      REAL :: &
+         C,CONV,EPS,FACT,HALF,ONE,P,Q,RES,SQRTPI,SUM,TWELVE,  &
+         TWO,X,XBIG,XDEN,XINF,XMININ,XNUM,Y,Y1,YSQ,Z,ZERO
+      DIMENSION C(7),P(8),Q(8)
+
+
+
+      DATA ONE,HALF,TWELVE,TWO,ZERO/1.0E0,0.5E0,12.0E0,2.0E0,0.0E0/,  &
+           SQRTPI/0.9189385332046727417803297E0/
+
+
+
+
+
+      DATA XBIG,XMININ,EPS/35.040E0,1.18E-38,1.19E-7/,  &
+          XINF/3.4E38/
+
+
+
+
+
+
+      DATA P/-1.71618513886549492533811E+0,2.47656508055759199108314E+1, &
+             -3.79804256470945635097577E+2,6.29331155312818442661052E+2, &
+             8.66966202790413211295064E+2,-3.14512729688483675254357E+4, &
+             -3.61444134186911729807069E+4,6.64561438202405440627855E+4/
+      DATA Q/-3.08402300119738975254353E+1,3.15350626979604161529144E+2, &
+            -1.01515636749021914166146E+3,-3.10777167157231109440444E+3, &
+              2.25381184209801510330112E+4,4.75584627752788110767815E+3, &
+            -1.34659959864969306392456E+5,-1.15132259675553483497211E+5/
+
+
+
+
+
+
+
+
+
+
+
+      DATA C/-1.910444077728E-03,8.4171387781295E-04, &
+           -5.952379913043012E-04,7.93650793500350248E-04, &
+           -2.777777777777681622553E-03,8.333333333333333331554247E-02, &
+            5.7083835261E-03/
+
+
+
+
+
+
+
+      CONV(I) = REAL(I)
+
+      PARITY=.FALSE.
+      FACT=ONE
+      N=0
+      Y=X
+      IF(Y.LE.ZERO)THEN
+
+
+
+        Y=-X
+        Y1=AINT(Y)
+        RES=Y-Y1
+        IF(RES.NE.ZERO)THEN
+          IF(Y1.NE.AINT(Y1*HALF)*TWO)PARITY=.TRUE.
+          FACT=-PI/SIN(PI*RES)
+          Y=Y+ONE
+        ELSE
+          RES=XINF
+          GOTO 900
+        ENDIF
+      ENDIF
+
+
+
+      IF(Y.LT.EPS)THEN
+
+
+
+        IF(Y.GE.XMININ)THEN
+          RES=ONE/Y
+        ELSE
+          RES=XINF
+          GOTO 900
+        ENDIF
+      ELSEIF(Y.LT.TWELVE)THEN
+        Y1=Y
+        IF(Y.LT.ONE)THEN
+
+
+
+          Z=Y
+          Y=Y+ONE
+        ELSE
+
+
+
+          N=INT(Y)-1
+          Y=Y-CONV(N)
+          Z=Y-ONE
+        ENDIF
+
+
+
+        XNUM=ZERO
+        XDEN=ONE
+        DO 260 I=1,8
+          XNUM=(XNUM+P(I))*Z
+          XDEN=XDEN*Z+Q(I)
+  260   CONTINUE
+        RES=XNUM/XDEN+ONE
+        IF(Y1.LT.Y)THEN
+
+
+
+          RES=RES/Y1
+        ELSEIF(Y1.GT.Y)THEN
+
+
+
+          DO 290 I=1,N
+            RES=RES*Y
+            Y=Y+ONE
+  290     CONTINUE
+        ENDIF
+      ELSE
+
+
+
+        IF(Y.LE.XBIG)THEN
+          YSQ=Y*Y
+          SUM=C(7)
+          DO 350 I=1,6
+            SUM=SUM/YSQ+C(I)
+  350     CONTINUE
+          SUM=SUM/Y-Y+SQRTPI
+          SUM=SUM+(Y-HALF)*LOG(Y)
+          RES=EXP(SUM)
+        ELSE
+          RES=XINF
+          GOTO 900
+        ENDIF
+      ENDIF
+
+
+
+      IF(PARITY)RES=-RES
+      IF(FACT.NE.ONE)RES=FACT/RES
+  900 GAMMA1=RES
+
+
+END FUNCTION GAMMA1
+  
