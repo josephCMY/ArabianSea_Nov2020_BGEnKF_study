@@ -37,13 +37,13 @@ def plot_windowbt( lon2d, lat2d, bt2d, ax ):
 
   # Plot out clr BTs
   clr_bts = bt2d*1.
-  clr_bts[ bt2d < 285 ] = np.nan
-  cnf_clr = ax.contourf( lon2d, lat2d, clr_bts, np.linspace(285,295,11),
+  clr_bts[ bt2d < 280 ] = np.nan
+  cnf_clr = ax.contourf( lon2d, lat2d, clr_bts, np.linspace(280,300,11),
                          cmap = 'binary', extend='max')
 
   # Plot out cld BTs
   cld_bts = bt2d*1.
-  cld_bts[ bt2d > 280 ] = np.nan
+  cld_bts[ bt2d > 264 ] = np.nan
   cnf_cld = ax.contourf( lon2d, lat2d, cld_bts, np.linspace(200,280,11),
                          cmap = cloud_cmap, extend='min')
 
