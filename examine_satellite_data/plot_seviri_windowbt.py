@@ -40,11 +40,11 @@ cloud_cmap = mcolors.LinearSegmentedColormap.from_list('ppt',cmap_data)
 # ----------------------------------
 def plot_windowbt( lon2d, lat2d, bt2d, ax ):
 
-  # Plot out clr BTs
-  clr_bts = bt2d*1.
-  clr_bts[ bt2d < 285 ] = np.nan
-  cnf_clr = ax.contourf( lon2d, lat2d, clr_bts, np.linspace(285,305,11),
-                         cmap = 'binary', extend='max')
+  ## Plot out clr BTs
+  #clr_bts = bt2d*1.
+  #clr_bts[ bt2d < 285 ] = np.nan
+  #cnf_clr = ax.contourf( lon2d, lat2d, clr_bts, np.linspace(285,305,11),
+  #                       cmap = 'binary', extend='max')
 
   # Plot out cld BTs
   cld_bts = bt2d*1.
@@ -76,7 +76,7 @@ date = seviri_bt_obj.attrs['start_time']
 # Plot out bts
 fig, axs = plt.subplots(nrows=1,ncols=1, figsize=(8,6))
 cnf_clr, cnf_cld = plot_windowbt( lon, lat, bt, axs )
-axs.set_ylim([-30,20])
+axs.set_ylim([-30,30])
 axs.set_xlim([50,110])
 axs.set_aspect(1)
 plt.savefig('trial_seviri_bt_plot.png')
