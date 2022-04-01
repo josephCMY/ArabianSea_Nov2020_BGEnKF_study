@@ -73,10 +73,12 @@ lon, lat = seviri_bt_obj.attrs['area'].get_lonlats()
 date = seviri_bt_obj.attrs['start_time']
 
 
+
 # Plot out bts
 fig, axs = plt.subplots(nrows=1,ncols=1, figsize=(8,6))
 cnf_clr, cnf_cld = plot_windowbt( lon, lat, bt, axs )
 axs.set_ylim([-30,30])
 axs.set_xlim([50,130])
 axs.set_aspect(1)
+axs.set_title( 'SEVIRI 10.8 $\mu$ on %s' % date.strftime('%d-%m-%Y %H:%M UTC'))
 plt.savefig('trial_seviri_bt_plot.png')
