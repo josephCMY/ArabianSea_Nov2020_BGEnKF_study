@@ -40,11 +40,11 @@ cloud_cmap = mcolors.LinearSegmentedColormap.from_list('ppt',cmap_data)
 # ----------------------------------
 def plot_windowbt( lon2d, lat2d, bt2d, ax ):
 
-  # Plot out clr BTs
-  clr_bts = bt2d*1.
-  clr_bts[ bt2d < 285 ] = np.nan
-  cnf_clr = ax.contourf( lon2d, lat2d, clr_bts, np.linspace(285,305,11),
-                         cmap = 'binary', extend='max')
+  ## Plot out clr BTs
+  #clr_bts = bt2d*1.
+  #clr_bts[ bt2d < 285 ] = np.nan
+  #cnf_clr = ax.contourf( lon2d, lat2d, clr_bts, np.linspace(285,305,11),
+  #                       cmap = 'binary', extend='max')
 
   # Plot out cld BTs
   cld_bts = bt2d*1.
