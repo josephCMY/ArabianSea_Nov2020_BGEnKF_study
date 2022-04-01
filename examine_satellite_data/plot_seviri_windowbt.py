@@ -56,21 +56,22 @@ def plot_windowbt( lon2d, lat2d, bt2d, ax ):
 # Open SEVIRI file
 scn = Scene( reader='seviri_l1b_native', filenames=[fname])
 
+
 # Load window bt DataArray from file
 scn.load(['IR_108'])
+
 
 # Loading bts, lat and lon into numpy arrays
 seviri_bt_obj = scn['IR_108']
 bt = seviri_bt_obj.values
 lon, lat = seviri_bt_obj.attrs['area'].get_lonlats()
 date = seviri_bt_obj.attrs['start_time']
-print( lon.shape)
-print(date)
+
 
 # Plot out bts
 fig, axs = plt.subplots(nrows=1,ncols=1, figsize=(8,6))
 cnf_clr, cnf_cld = plot_windowbt( lon, lat, bt, axs )
-axs.set_ylim([-30,30])
-axs.set_xlim([50,100])
+axs.set_ylim([-30,20])
+axs.set_xlim([50,110])
 axs.set_aspect(1)
 plt.savefig('trial_seviri_bt_plot.png')
