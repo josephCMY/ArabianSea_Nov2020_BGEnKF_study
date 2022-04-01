@@ -14,7 +14,7 @@ import datetime
 
 
 # Read in SEVIRIR native file name from command line
-fname = 'MSG1-SEVI-MSG15-0100-NA-20200318065740.443000000Z-NA.nat'
+fname = 'seviri_native_file/MSG1-SEVI-MSG15-0100-NA-20200315152741.253000000Z-NA.nat'
 
 
 
@@ -56,29 +56,30 @@ def plot_windowbt( lon2d, lat2d, bt2d, ax ):
   return cnf_clr, cnf_cld 
 
 
-
-
 # Open SEVIRI file
 scn = Scene( reader='seviri_l1b_native', filenames=[fname])
-
+#id_list= scn.all_dataset_ids()
+#for datid in id_list:
+#    print( datid)
 
 # Load window bt DataArray from file
 scn.load(['IR_108'])
 
 
 # Loading bts, lat and lon into numpy arrays
-seviri_bt_obj = scn['IR_108']
-bt = seviri_bt_obj.values
-lon, lat = seviri_bt_obj.attrs['area'].get_lonlats()
-date = seviri_bt_obj.attrs['start_time']
+seviri_windowbt_obj = scn['IR_108']
+windowbt = seviri_windowbt_obj.values
+lon, lat = seviri_windowbt_obj.attrs['area'].get_lonlats()
+date = seviri_windowbt_obj.attrs['start_time']
 
 
 
 # Plot out bts
 fig, axs = plt.subplots(nrows=1,ncols=1, figsize=(8,6))
-cnf_clr, cnf_cld = plot_windowbt( lon, lat, bt, axs )
+cnf_clr, cnf_cld = plot_windowbt( lon, lat, windowbt, axs )
 axs.set_ylim([-30,30])
 axs.set_xlim([50,130])
 axs.set_aspect(1)
 axs.set_title( 'SEVIRI 10.8 $\mu$ on %s' % date.strftime('%d-%m-%Y %H:%M UTC'))
-plt.savefig('trial_seviri_bt_plot.png')
+plt.savefig('seviri_windowbt_%s.png' % date.strftime( "%Y%m%d%H%M") )
+plt.close()
