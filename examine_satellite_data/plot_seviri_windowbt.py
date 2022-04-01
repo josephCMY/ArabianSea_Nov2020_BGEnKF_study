@@ -69,11 +69,7 @@ scn.load(['IR_108'])
 seviri_windowbt_obj = scn['IR_108']
 windowbt = seviri_windowbt_obj.values
 lon, lat = seviri_windowbt_obj.attrs['area'].get_lonlats()
-date = seviri_windowbt_obj.attrs['end_time']
-if date.minute != 0:
-  print( date.minute)
-  quit()
-
+date = seviri_windowbt_obj.attrs['start_time']
 
 
 # Plot out bts
