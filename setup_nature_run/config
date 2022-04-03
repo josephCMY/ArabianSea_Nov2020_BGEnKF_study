@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Configuration for setting up ensemble for reanalysis
+
+# Start and end date for setup
+date_st=202011061200
+date_ed=202011110300
+
+# Time interval between ERA5 files
+t_int=60
+
+# Files to process (two options)
+# For initial setup:
+wrf_filelist="wrfinput_d01 wrfbdy_d01"
+# For setup after 30 Apr 2017 (12 UTC), 
+#wrf_filelist="wrfbdy_d01"
+
+# Directories
+WRFV3_DIR=/work/04920/tg842199/stampede2/nonlinear_IR-DA/WRFV3
+WRFDA_DIR=/work/04920/tg842199/stampede2/nonlinear_IR-DA/WRFDA
+WPS_DIR=/work/04920/tg842199/stampede2/nonlinear_IR-DA/WPS
+
+
+# Function to advance time 
+function advance_time {
+  ccyymmdd=`echo $1 |cut -c1-8`
+  hh=`echo $1 |cut -c9-10`
+  mm=`echo $1 |cut -c11-12`
+  inc=$2
+  date -u -d $inc' minutes '$ccyymmdd' '$hh':'$mm +%Y%m%d%H%M
+}
+export -f advance_time
+

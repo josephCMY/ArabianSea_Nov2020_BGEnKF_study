@@ -25,18 +25,18 @@
  i_parent_start               = 1,
  j_parent_start               = 1,
  geog_data_res                = 30s,
- e_we                         = 432,
- e_sn                         = 247,
+ e_we                         = 431,
+ e_sn                         = 401,
  dx                           = 9000,
  dy                           = 9000,
  map_proj                     = 'mercator',
  ref_lat                      =  0.0,
- ref_lon                      = 72.5,
- stand_lon                    =  85.0,
- truelat1                     = 10.0,
- truelat2                     = -10.0, 
+ ref_lon                      = 73.0,
+ stand_lon                    = 73.0,
+ truelat1                     = 0.0,
+ truelat2                     = 0.0, 
  geog_data_res                = '30s',
- geog_data_path               = '/work/04920/tg842199/stampede2/wrf/geogrid/hi_res',
+ geog_data_path               = '/global/cscratch1/sd/my_chan/geog',
  opt_geogrid_tbl_path         = './geogrid'
 /
 
@@ -46,7 +46,7 @@
 /
 
 &metgrid
- fg_name = './processed_era5/LAND_WPS', './processed_era5/PLVL_WPS', 
+ fg_name = './processed_era5/WPS',
  io_form_metgrid = 2, 
  opt_output_from_metgrid_path = './processed_era5',
  opt_metgrid_tbl_path         = './metgrid',
