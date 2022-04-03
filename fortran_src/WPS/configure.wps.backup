@@ -53,29 +53,29 @@ COMPRESSION_LIBS	=  # intentionally left blank, fill in COMPRESSION_LIBS below
 COMPRESSION_INC		=  # intentionally left blank, fill in COMPRESSION_INC below
 
 #
-#   Settings for Linux x86_64, Intel compiler    (dmpar) 
+#   Settings for Cray XC CLE/Linux x86_64, Intel compiler   (dmpar) 
 #
 #
-COMPRESSION_LIBS    = -L/work/04920/tg842199/stampede2/pkg/grib2/lib -ljasper -lpng -lz
-COMPRESSION_INC     = -I/work/04920/tg842199/stampede2/pkg/grib2/include
+COMPRESSION_LIBS    = -L/global/common/cori/software/jasper/1.900.1/hsw/intel/lib -ljasper -lpng -lz
+COMPRESSION_INC     = -I/global/common/cori/software/jasper/1.900.1/hsw/intel/include
 FDEFS               = -DUSE_JPEG2000 -DUSE_PNG
-SFC                 = ifort
-SCC                 = icc
-DM_FC               = mpif90 -f90=ifort
-DM_CC               = mpicc -cc=icc
+SFC                 = ftn
+SCC                 = cc
+DM_FC               = $(SFC)
+DM_CC               = $(SCC) 
 FC                  = $(DM_FC)
 CC                  = $(DM_CC)
 LD                  = $(FC)
 FFLAGS              = -FR -convert big_endian
 F77FLAGS            = -FI -convert big_endian
-FCSUFFIX            = 
+FCSUFFIX            =
 FNGFLAGS            = $(FFLAGS)
-LDFLAGS             = 
-CFLAGS              = -w
+LDFLAGS             =
+CFLAGS              =
 CPP                 = /lib/cpp -P -traditional
 CPPFLAGS            = -D_UNDERSCORE -DBYTESWAP -DLINUX -DIO_NETCDF -DIO_BINARY -DIO_GRIB1 -DBIT32 -D_MPI
 ARFLAGS             =
-CC_TOOLS            = 
+CC_TOOLS            =
 
 ########################################################################################################################
 #

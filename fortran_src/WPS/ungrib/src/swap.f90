@@ -9,6 +9,8 @@
 
 
 
+
+
 subroutine swap4(in,nn)
 !#if defined (DEC) || defined (ALPHA) || defined (alpha) || defined (1)
 ! swaps bytes in groups of 4 to compensate for byte swapping within

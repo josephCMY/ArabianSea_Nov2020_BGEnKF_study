@@ -9,6 +9,8 @@
 
 
 
+
+
 module stringutil
 
 !BUG: STRSIZE should be as large as the longest string length used in WPS
