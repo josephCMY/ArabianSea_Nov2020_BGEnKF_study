@@ -17,28 +17,29 @@ echo "Starting to download GEFS data"
 # PART A: For each PSU-EnKF ensemble member, construct a list of 
 # GEFS GRIB filenames on the AWS server
 # ===============================================================
-#
-# General idea: 
-# -------------
-# Suppose the GEFS has 30 members and initiates every 6 hrs, 
-# and we want 91 members.
-#
-# 1) First 30 members use analysis states at 00, 06, 12, 18 UTC
-# 2) Next 30 members use 6-fcst states valid at 00, 06, 12, 18 UTC
-# 3) Next 30 members use 12-fcst states valid at 00, 06, 12, 18 UTC
-# 4) Final member uses 18-fcst state 
-#
+# General idea: use multiple sets of GEFS forecasts to form the
+# desired ensemble. I.e., use members from time-staggered forecasts
+# 
+# E.g., to generate a 60-member ensemble:
+# The first 20 members will use initial and boundary conditions
+# based on the GEFS forecasts initiated at time $DATE_START
+# The second 20 members will use initial and boundary conditions
+# based on the GEFS forecasts initiated at $DATE_START - 6 hours
+# The third 20 members will use initial and boundary conditions
+# based on the GEFS forecasts initiated at $DATE_START - 12 hours
+# These three sets of 20-member forecasts are all valid at the 
+# same date.
 # -------------------------------------------------------------
 
-# Iterating thru each PSU-EnKF member
+# Iterating thru each PSU-EnKF ensemble member
 for id in `seq 1 $ENSEMBLE_SIZE`; do
+  
+  # Initialize variable to hold GRIB file names
+  fname_list=''
 
-  # Initialize variable to store all AWS paths for this member
-  fname_list=""
-
-  # Determine which GEFS lead time this member uses
-  lead_time=$(( ( ($id-1)/$GEFS_SIZE )*$GEFS_INIT_INTERVAL ))
-  lead_time_str=`printf "%03g" $lead_time`
+  # Figure out which GEFS initiation date is used by this ensemble member
+  lag_hours=$(( ( ($id-1)/$GEFS_SIZE )*$GEFS_FCST_INTERVAL ))
+  date_init=`advance_time $DATE_START -$(( $lag_hours*60 ))`
 
   # Pretty print ensemble ID
   id_str=`printf "%03d" $id`
@@ -47,23 +48,40 @@ for id in `seq 1 $ENSEMBLE_SIZE`; do
   gefs_id=$(( $id - ( ($id-1)/$GEFS_SIZE )*$GEFS_SIZE  ))
   echo PSU-EnKF ID $id
   echo GEFS ID $gefs_id
-  
+
   # Pretty print GEFS ensemble id
   gefs_id_str=`printf "%02d" $gefs_id`
 
-  # Construct all the file names desired
-  date_nw=$DATE_START
-  while [[ $date_nw -le $DATE_END ]]; do
+  # Now figure out all the forecast lead times needed
+  lead_time=$lag_hours
+  lead_time_list=$lead_time
+  date_nw=$date_init
+  while [[ `advance_time $date_nw $(( $lead_time*60 ))` -le $DATE_END ]]; do
+   
+    # Increment lead_time
+    lead_time=$(( $lead_time + $GEFS_TIME_INTERVAL ))
 
-    # Compute init date corresponding to date_nw and lead_hours
-    date_init=`advance_time $date_nw -$(( $lead_time*60 ))`
+    # Store new lead time
+    if [[ `advance_time $date_nw $(( $lead_time*60 ))` -le $DATE_END ]]; then
+      lead_time_list=$lead_time_list" "$lead_time
+    fi
+    
+  done
+  echo Lead times generated $lead_time_list
 
-    # Extract relevant elements of initiation date
-    ccyymmdd=`echo $date_init |cut -c1-8`
-    HH=`echo $date_init |cut -c9-10`
 
-    # Iterating thru path types
-    for raw_pgrb_fmt in $PGRB2A_PATH_FORMAT $PGRB2B_PATH_FORMAT; do
+  # Extract relevant elements of initiation date
+  ccyymmdd=`echo $date_init |cut -c1-8`
+  HH=`echo $date_init |cut -c9-10`
+
+
+  # Construct list of AWS paths to appropriate pgrb files and store in fname_list
+  for raw_pgrb_fmt in $PGRB2A_PATH_FORMAT $PGRB2B_PATH_FORMAT; do
+    for lead_time in $lead_time_list; do
+
+      # Make pretty string
+      lead_time_str=`printf "%03g" $lead_time`
+
       # Load path format specified in config file config file
       aws_path=$raw_pgrb_fmt
 
@@ -76,20 +94,18 @@ for id in `seq 1 $ENSEMBLE_SIZE`; do
       # Store the AWS path into the fname_list
       fname_list="$fname_list"$'\n'"$aws_path"
     
-    done # --- Iterated over both pgrb2 types 
+    done # --- Iterated over lead times
+  done # --- Iterated over both types of pgrb files
 
-    # Advance date
-    date_nw=`advance_time $date_nw $(( $GEFS_INIT_INTERVAL * 60 ))`
 
-  done # --- Iterated through all dates
-
-  # Saving the list of filenames produced
+  # Store file name list into a textfile in RAW_GEFS_DIR
   mkdir -p $RAW_GEFS_DIR/$id_str
   echo "$fname_list" >& $RAW_GEFS_DIR/$id_str/aws_path_list.txt
 
-done # --- Iterated over all members
 
-  
+done # --- Iterated over ensemble members
+
+
 
 # ============================================================================
 # PART B: Download GEFS GRIB files from the AWS
@@ -98,7 +114,7 @@ done # --- Iterated over all members
 # point to the desired GEFS grib files. 
 # In this part, we will use rclone to download these files.
 # ----------------------------------------------------------------------------
-active_procs=0
+
 # Iterate over all ensemble members
 for id_str in `seq -f "%03g" 1 $ENSEMBLE_SIZE`; do
 
@@ -112,15 +128,8 @@ for id_str in `seq -f "%03g" 1 $ENSEMBLE_SIZE`; do
   # Download GRIB files from AWS server
   for ff in $fname_list; do
     echo Rcloning $ff
-    ~/rclone-v1.53.2-linux-amd64/rclone copy AWS_us-east-1:$ff . &
+    ~/rclone-v1.53.2-linux-amd64/rclone copy AWS_us-east-1:$ff . 
   done
-
-  # Increment number of active procs
-  active_procs=$(( $active_procs + 1 ))
-  if [[ $active_procs -ge $MAX_NPROCS ]]; then
-    wait
-    active_procs=0
-  fi
 
 done
 

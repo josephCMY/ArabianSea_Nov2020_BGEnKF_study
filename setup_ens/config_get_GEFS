@@ -6,7 +6,7 @@
 # These dates must be at 0000 UTC, 0600 UTC, 1200 UTC or 1800 UTC
 DATE_START=202011061200 
 DATE_END=202011110300   
-GEFS_FCST_INTERVAL=6 	# Time interval between GEFS initiation times
+GEFS_INIT_INTERVAL=6 	# Time interval between GEFS initiation times
 #GEFS_TIME_INTERVAL=3  # Time interval between GEFS forecast output files
 
 
@@ -19,8 +19,8 @@ GEFS_FCST_INTERVAL=6 	# Time interval between GEFS initiation times
 #        https://noaa-gefs-pds.s3.amazonaws.com/index.html to find
 #        out.
 
-ENSEMBLE_SIZE=60        # Want 60 ensemble members for PSU-EnKF
-GEFS_SIZE=30		# Number of members available in the GEFS
+ENSEMBLE_SIZE=61        # Want 60 ensemble members for PSU-EnKF
+GEFS_SIZE=30	        	# Number of members available in the GEFS
 
 
 
@@ -75,3 +75,8 @@ WRF_REAL_NAMELIST=~/PSU-EnKF_w_satellites/system_types/barebones/setup_ens/gefs_
 WRF_SPINUP_NAMELIST=~/PSU-EnKF_w_satellites/system_types/barebones/setup_ens/gefs_based_ens/namelist.spinup
 
 
+
+
+# MPI SETTINGS
+# ----------------
+MAX_NPROCS=4
