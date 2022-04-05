@@ -112,15 +112,9 @@ for id_str in `seq -f "%03g" 1 $ENSEMBLE_SIZE`; do
   # Download GRIB files from AWS server
   for ff in $fname_list; do
     echo Rcloning $ff
-    ~/rclone-v1.53.2-linux-amd64/rclone copy AWS_us-east-1:$ff . &
+    ~/rclone-v1.53.2-linux-amd64/rclone copy AWS_us-east-1:$ff . 
   done
 
-  # Increment number of active procs
-  active_procs=$(( $active_procs + 1 ))
-  if [[ $active_procs -ge $MAX_NPROCS ]]; then
-    wait
-    active_procs=0
-  fi
 
 done
 
