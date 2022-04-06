@@ -7,7 +7,7 @@ tarname = crtm
 distdir = $(tarname)_$(version)
 
 # Prefix-specific substitution variables
-prefix      = /work/04920/tg842199/stampede2/PSU-EnKF_master/myfork/fortran_src/crtm_v2.3.0
+prefix      = /global/homes/m/my_chan/IndianOcean_Nov2022_BGEnKF_study/fortran_src/crtm_v2.3.0
 
 # Mixed package and prefix substitution variables
 installdir  = $(prefix)/$(distdir)
