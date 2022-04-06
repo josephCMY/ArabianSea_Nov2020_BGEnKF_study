@@ -21,5 +21,8 @@
 **/*.a
 **/*AllWindsQIText
 **/*tar.gz
+**/*.tar
 **/*.diag
 **/obs_duplicate_time.diag*
+fortran_src/crtm_v2.3.0/coefficients/*
+
