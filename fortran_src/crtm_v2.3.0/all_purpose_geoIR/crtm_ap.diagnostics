@@ -1,0 +1,20 @@
+      250991
+ length of zone        3692
+ ahi_himawari8           8
+ ahi_himawari8          10
+ ahi_himawari8          14
+BT MPI_Gather took   0.0 seconds
+Unpack BT reshaping   0.0 seconds
+ created ncfile
+ Defined lat lon dimensions
+ Defined 2d Ids            2           1
+ Defined lat lon variables
+ Defined lat lon attributes
+ ahi_himawari8_ch008
+ ahi_himawari8_ch010
+ ahi_himawari8_ch014
+ Defined BT variables
+ Closed definition mode
+ Inserted lat lon meshgrid into file
+ Inserted BT field
+ Closed and flushed file into hard drive

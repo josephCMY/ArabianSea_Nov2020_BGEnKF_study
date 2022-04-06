@@ -1,0 +1,17 @@
+&crtm_parameters
+channel_count     = 3
+sensor_list       = 'ahi_himawari8', 'ahi_himawari8', 'ahi_himawari8',
+channel_id        =               8,              10,              14,
+sensor_heights    =      35786000.0,      35786000.0,      35786000.0,
+sensor_lons       =           140.7,           140.7,           140.7,
+sensor_lon_min    =            84.0,            84.0,            84.0,
+sensor_lon_max    =           131.0,           131.0,           131.0,
+sensor_lat_min    =           -21.0,           -21.0,           -21.0,
+sensor_lat_max    =            16.0,            16.0,            16.0,
+crtm_coeff_path   = './coefficients/' 
+/
+
+& wrf_parameters
+grid_thinning     = 1,
+first_index       = 1,
+/

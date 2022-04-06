@@ -1,0 +1,11 @@
+ Zenith angle, scan angle, sat dis, sat_h
+   56.1751551479694        7.21908138698304        38279404.0000000     
+  3.5786000E+07
+ lon, lat, Re, sat_lon
+   1.623083     -0.2206908       6378000.       2.455676    
+ Finished running CRTM on all points
+ CRTM solutions sent to all processes
+ Wrote Longitudes
+ Wrote Latitudes
+ Wrote BT to files
+ Destroying the CRTM...

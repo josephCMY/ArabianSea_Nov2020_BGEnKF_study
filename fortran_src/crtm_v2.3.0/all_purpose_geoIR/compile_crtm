@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Clean up old compilation
+rm *.mod *.o *.exe
+
+# Compile
+ftn -c -convert big_endian -I$NETCDF/include module_netcdf.f
+ftn -c -convert big_endian -FR -L$CRTM_DIR/lib -lcrtm -I$CRTM_DIR/include module_utils.f
+ftn -c -convert big_endian -assume byterecl -traceback -FR -I$NETCDF/include -I$CRTM_DIR/include main_crtm.f
+ftn -o crtm.exe module_utils.o module_netcdf.o main_crtm.o -L$CRTM_DIR/lib -lcrtm -L$NETCDF/lib -lnetcdff  
+
