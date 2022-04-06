@@ -1,5 +1,4 @@
 ''' Script to convert SEVIRI native file into netCDF '''
-# IMPORTANT: designed to work with a conda environment that has satpy, numpy and matplotlib installed
 
 
 # import modules
@@ -7,43 +6,100 @@ from satpy import Scene
 import sys
 import numpy as np
 import datetime
-import xarray
-from netCDF4 import Dataset
+from netCDF4 import Dataset as ncopen
+import pickle
 
-# Read in SEVIRIR native file name from command line
-fname = 'seviri_native_file/MSG1-SEVI-MSG15-0100-NA-20200315152741.253000000Z-NA.nat'
 
+# ============================================================================
+# USER INPUTS
+# ----------------------------------------------------------------------------
+
+# File name of SEVIRI native
+fname = sys.argv[1]
+
+# Geographical limits bounding the desired area
+latmin = -20.
+latmax =  20.
+lonmin =  50.
+lonmax = 100.
+
+# List of desired channel names (names must follow native file's convention)
+chlist = ['WV_062','IR_108']
+
+
+
+# ===========================================================================
+# Loading native file and subsetting to specified region
+# ---------------------------------------------------------------------------
 
 # Open SEVIRI file
 scn = Scene( reader='seviri_l1b_native', filenames=[fname])
 
+# Load channel data from file
+scn.load(chlist)
 
-# Load all 3km observations an
-id_list= scn.all_dataset_ids()
-for datid in id_list:
-  print(datid)
+# Load longitude and latitude
+ch = chlist[0]
+lon2d, lat2d = scn[ch].attrs['area'].get_lonlats()
+shp2d = lat2d.shape
+halfway_inds = np.array( np.array(shp2d, dtype=int)/2, dtype=int )
 
-# Load window bt DataArray from file
-scn.load(['IR_108'])
-seviri_windowbt_obj = scn['IR_108']
-print( seviri_windowbt_obj.values )
-seviri_windowbt_obj.to_netcdf(path='trial.nc', format='NETCDF4')
+# Set up domain masks
+latvec = lat2d[ :, halfway_inds[1] ]
+latmask = ( latvec >= latmin ) * (latvec <= latmax )
+lonvec = lon2d[ halfway_inds[0], : ]
+lonmask = ( lonvec >= lonmin ) * ( lonvec <= lonmax )
+
+# Subset data to desired area
+sub_data = {}
+sub_data['lon'] = np.array( lon2d[latmask][:,lonmask] )
+sub_data['lat'] = np.array( lat2d[latmask][:,lonmask] )
+for ch in chlist:
+  sub_data[ch] = np.array( (scn[ch].values)[latmask][:,lonmask] )
+
+# Load time period in which the sensing was done
+date_st = scn[ch].attrs['start_time']
+date_ed = scn[ch].attrs['end_time']
 
 
-quit()
-# Loading bts, lat and lon into numpy arrays
-seviri_windowbt_obj = scn['IR_108']
-windowbt = seviri_windowbt_obj.values
-lon, lat = seviri_windowbt_obj.attrs['area'].get_lonlats()
-date = seviri_windowbt_obj.attrs['start_time']
+
+# =========================================================================
+# Output subsetted data as a netcdf file
+# -------------------------------------------------------------------------
+
+# Devise output ncfile name and open ncfile
+out_fname = ( 'extracted_seviri_ncfiles/seviri_%sUTC.nc' 
+              % date_ed.strftime("%Y-%m-%d_%H%M") )
+f = ncopen( out_fname, 'w')
+
+# Construct dimensions
+shp2d = sub_data[ch].shape
+lat_dim = f.createDimension('lat', shp2d[0] )
+lon_dim = f.createDimension('lon', shp2d[1] )
+
+# Construct attributes
+f.description = "Extracted SEVIRI BT data"
+f.sensor_start_time = date_st.strftime("%Y-%m-%d_%H:%M:%S")
+f.sensor_end_time   = date_ed.strftime("%Y-%m-%d_%H:%M:%S")
+
+# Construct and store variables into the ncfile
+lat = f.createVariable( "latitude" , np.float32, ("lat","lon",))
+lat.units = 'deg_north'
+lat[:] = sub_data['lat']*1.
+
+lon = f.createVariable( "longitude", np.float32, ("lat","lon",))
+lon.units = 'deg_south'
+lon[:] = sub_data['lon']
+
+for ch in chlist:
+  bt = f.createVariable( ch, np.float32, ("lat","lon",))
+  bt.units = 'Kelvins'
+  bt[:] = sub_data[ch]
+
+# Close ncfile and flush to harddrive
+f.close()
 
 
 
-# Plot out bts
-fig, axs = plt.subplots(nrows=1,ncols=1, figsize=(8,6))
-cnf_clr, cnf_cld = plot_windowbt( lon, lat, windowbt, axs )
-axs.set_ylim([-30,30])
-axs.set_xlim([50,130])
-axs.set_aspect(1)
-axs.set_title( 'SEVIRI 10.8 $\mu$ on %s' % date.strftime('%d-%m-%Y %H:%M UTC'))
-plt.savefig('trial_seviri_bt_plot.png')
+
+
