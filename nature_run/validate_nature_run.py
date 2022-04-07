@@ -146,7 +146,7 @@ hov_data = pickle.load( f )
 # Generate figure object
 fig, axs = plt.subplots( ncols = 2, nrows = 1, figsize=(6,4) )
 
-crange = np.linspace(200,280,11)
+crange = np.linspace(230,280,11)
 cmap = 'jet_r'
 
 # Plot seviri stuff
