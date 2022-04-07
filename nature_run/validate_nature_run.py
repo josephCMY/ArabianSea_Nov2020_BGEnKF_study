@@ -147,7 +147,7 @@ hov_data = pickle.load( f )
 fig, axs = plt.subplots( ncols = 2, nrows = 1, figsize=(6,6) )
 
 crange = 11
-cmap = 'jet_r'
+cmap = 'jet'
 
 # Plot seviri stuff
 print( len(hov_data['seviri']['date']) )
