@@ -173,7 +173,7 @@ axs[1].yaxis.set_ticklabels([])
 # Generate cbar
 fig.subplots_adjust(bottom=0.2)
 cbar_ax = fig.add_axes( [0.1,0.05,0.8,0.05] )
-fig.colorbar( cnf, cax=cbar_ax )
+fig.colorbar( cnf, cax=cbar_ax, orientation = 'horizontal' )
 
 plt.savefig('hovmoller_comparison.png' )
 plt.close()
