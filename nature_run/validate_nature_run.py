@@ -144,7 +144,7 @@ hov_data = pickle.load( f )
 
 
 # Generate figure object
-fig, axs = plt.subplots( ncols = 2, nrows = 1, figsize=(6,4) )
+fig, axs = plt.subplots( ncols = 2, nrows = 1, figsize=(6,5) )
 
 crange = np.linspace(230,280,11)
 cmap = 'jet_r'
@@ -156,16 +156,24 @@ print( hov_data['seviri']['window'].shape)
 print( hov_data['seviri']['window'] )
 axs[0].contourf( np.mean( hov_data['seviri']['lon'], axis=0 ),
                  hov_data['seviri']['date'] ,
-                 hov_data['seviri']['window'], crange, cmap = cmap )
+                 hov_data['seviri']['window'], crange, cmap = cmap,
+                 extend='min')
 axs[0].set_title('SEVIRI Window-BT')
 axs[0].set_xlim( [ np.mean( hov_data['nature']['lon'], axis=0 ).min(),
                    np.mean( hov_data['nature']['lon'], axis=0 ).max() ] )
 
 # Plot nature run stuff
-axs[1].contourf( np.mean( hov_data['nature']['lon'], axis=0 ),
-                 hov_data['seviri']['date'] ,
-                 hov_data['nature']['window'], crange, cmap = cmap )
+cnf = axs[1].contourf( np.mean( hov_data['nature']['lon'], axis=0 ),
+                       hov_data['seviri']['date'] ,
+                       hov_data['nature']['window'], crange, cmap = cmap,
+                       extend='min')
 axs[1].set_title('Nature Window-BT')
+axs[1].yaxis.set_ticklabels([])
+
+# Generate cbar
+fig.subplots_adjust(bottom=0.2)
+cbar_ax = fig.add_axes( [0.1,0.05,0.8,0.05] )
+fig.colorbar( cnf, cax=cbar_ax )
 
 plt.savefig('hovmoller_comparison.png' )
 plt.close()
