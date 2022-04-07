@@ -158,6 +158,8 @@ axs[0].contourf( np.mean( hov_data['seviri']['lon'], axis=0 ),
                  hov_data['seviri']['date'] ,
                  hov_data['seviri']['window'], crange, cmap = cmap )
 axs[0].set_title('SEVIRI Window-BT')
+axs[0].set_xlim( [ np.mean( hov_data['nature']['lon'], axis=0 ).min(),
+                   np.mean( hov_data['nature']['lon'], axis=0 ).max() ] )
 
 # Plot nature run stuff
 axs[1].contourf( np.mean( hov_data['nature']['lon'], axis=0 ),
