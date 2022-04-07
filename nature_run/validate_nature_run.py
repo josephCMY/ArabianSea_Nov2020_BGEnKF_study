@@ -153,6 +153,7 @@ cmap = 'jet_r'
 print( len(hov_data['seviri']['date']) )
 print( np.mean( hov_data['seviri']['lon'], axis=0 ).shape)
 print( hov_data['seviri']['window'].shape)
+print( hov_data['seviri']['window'] )
 axs[0].contourf( np.mean( hov_data['seviri']['lon'], axis=0 ),
                  hov_data['seviri']['date'] ,
                  hov_data['seviri']['window'], crange, cmap = cmap )
