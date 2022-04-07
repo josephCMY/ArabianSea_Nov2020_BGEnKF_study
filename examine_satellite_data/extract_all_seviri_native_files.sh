@@ -30,7 +30,7 @@ cnt=0
 for ff in `ls --color=none seviri_native_file/*.nat`; do
 
   # Initiate data extraction for the desired file
-  python convert_seviri_nat2nc.py $ff >& extracted_seviri_ncfiles/log.extract_${ff::-18} &
+  python convert_seviri_nat2nc.py $ff >> log.proc_$num_active_procs &
   cnt=$(( $cnt + 1 ))
   echo Processing $cnt out of $tot_cnt files
   num_active_procs=$(( $num_active_procs + 1 ))
