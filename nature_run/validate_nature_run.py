@@ -144,7 +144,7 @@ hov_data = pickle.load( f )
 
 
 # Generate figure object
-fig, axs = plt.subplots( ncols = 2, nrows = 1, figsize=(6,6) )
+fig, axs = plt.subplots( ncols = 2, nrows = 1, figsize=(6,4) )
 
 crange = 11
 cmap = 'jet'
