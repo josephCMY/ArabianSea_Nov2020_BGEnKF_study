@@ -3,11 +3,11 @@
 # Configuration for setting up ensemble for reanalysis
 
 # Start and end date for setup
-date_st=201110070000
-date_ed=201111070000
+date_st=201110110000
+date_ed=201110210000
 
 # Time interval between ERA5 files
-t_int=60
+t_int=360
 
 # Files to process (two options)
 # For initial setup:

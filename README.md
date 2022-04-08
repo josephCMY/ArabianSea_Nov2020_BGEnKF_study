@@ -1,4 +1,4 @@
-# BGEnKF Test Case: Arabian Sea MCS on Nov 2020
+# BGEnKF Test Case: Indian Ocean Oct 2011 MJO Event 
 
 Wrote and implemented the BGEnKF to do window channel (10.2 um) DA. 
 

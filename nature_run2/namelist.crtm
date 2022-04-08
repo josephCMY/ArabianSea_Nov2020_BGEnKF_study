@@ -1,0 +1,17 @@
+&crtm_parameters
+channel_count     = 2
+sensor_list       =    'seviri_m08',    'seviri_m08',
+channel_id        =               5,              10,
+sensor_heights    =      35786000.0,      35786000.0,
+sensor_lons       =            41.5,            41.5,
+sensor_lon_min    =            50.0,            50.0,
+sensor_lon_max    =           100.0,           100.0,
+sensor_lat_min    =           -20.0,           -20.0,
+sensor_lat_max    =            20.0,            20.0,
+crtm_coeff_path   = '~/IndianOcean_Nov2022_BGEnKF_study/fortran_src/crtm_v2.3.0/coefficients/' 
+/
+
+& wrf_parameters
+grid_thinning     = 1,
+first_index       = 1,
+/

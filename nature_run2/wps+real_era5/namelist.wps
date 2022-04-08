@@ -1,0 +1,53 @@
+&share
+ wrf_core                     = 'ARW',
+ max_dom                      = 1,
+ start_year                   = 2020,
+ start_month                  = 11,  
+ start_day                    = 06,  
+ start_hour                   = 12,  
+ start_minute                 = 00,  
+ start_second                 = 00,  
+ end_year                     = 2020,
+ end_month                    = 11,  
+ end_day                      = 11,  
+ end_hour                     = 03,  
+ end_minute                   = 00,  
+ end_second                   = 00,  
+ interval_seconds             = 3600, 
+ io_form_geogrid              = 2, 
+ opt_output_from_geogrid_path = './',
+ debug_level                  = 0,
+/
+
+&geogrid
+ parent_id                    = 0,
+ parent_grid_ratio            = 1, 
+ i_parent_start               = 1,
+ j_parent_start               = 1,
+ geog_data_res                = 30s,
+ e_we                         = 431,
+ e_sn                         = 401,
+ dx                           = 9000,
+ dy                           = 9000,
+ map_proj                     = 'mercator',
+ ref_lat                      =  0.0,
+ ref_lon                      = 73.0,
+ stand_lon                    = 73.0,
+ truelat1                     = 0.0,
+ truelat2                     = 0.0, 
+ geog_data_res                = '30s',
+ geog_data_path               = '/global/cscratch1/sd/my_chan/geog',
+ opt_geogrid_tbl_path         = './geogrid'
+/
+
+&ungrib
+ out_format                   = 'WPS'
+ prefix                       = './processed_era5/WPS',
+/
+
+&metgrid
+ fg_name = './processed_era5/WPS',
+ io_form_metgrid = 2, 
+ opt_output_from_metgrid_path = './processed_era5',
+ opt_metgrid_tbl_path         = './metgrid',
+/
