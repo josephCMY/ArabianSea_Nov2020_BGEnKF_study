@@ -55,7 +55,7 @@ cat << EOF
 /
 
 &metgrid
- fg_name = './processed_era5/PLVL','./processed_era5/LAND',
+ fg_name = './processed_era5/WPS',
  io_form_metgrid = 2, 
  opt_output_from_metgrid_path = './processed_era5',
  opt_metgrid_tbl_path         = './metgrid',
