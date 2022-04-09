@@ -9,23 +9,42 @@ dx=$((DX[$domain_id-1]/1000))
 ##  the radar data is only assimilated for d03
 if [[ $domain_id != 3 ]]; then USE_RADAR_RV=false; fi
 
-##enkfvar      = 'T         ', 'U         ', 'V         ', 'QVAPOR    ', 'QCLOUD    ', 'QRAIN     ', 'QICE      ', 'QSNOW     ', 'QGRAUP    ', 'PH        ', 'MU        ', 'PSFC      ', 'P         ', 'PHB       ', 'PB        ', 'MUB       ', 'U10       ', 'V10       ', 'TSK       ','W         ',
-##updatevar    = 'T         ', 'U         ', 'V         ', 'QVAPOR    ', 'QCLOUD    ', 'QRAIN     ', 'QICE      ', 'QSNOW     ', 'QGRAUP    ', 'PH        ', 'MU        ', 'PSFC      ', 'P         ', 'U10       ', 'V10       ', 'TSK       ', 
 
-#enkfvar      = 'T         ', 'U         ', 'V         ', 'QVAPOR    ', 'QCLOUD    ', 'QRAIN     ', 'QICE      ', 'QSNOW     ', 'QGRAUP    ', 'PH        ', 'MU        ', 'PSFC      ', 'P         ', 'PHB       ', 'PB        ', 'MUB       ', 'U10       ', 'V10       ', 'TSK       ','W         ',
-#updatevar    = 'T         ', 'U         ', 'V         ', 'QVAPOR    ', 'QCLOUD    ', 'QRAIN     ', 'QICE      ', 'QSNOW     ', 'QGRAUP    ', 'PH        ', 'MU        ', 'PSFC      ', 'P         ', 'U10       ', 'V10       ', 'TSK       ', 
+## Special updatevar list for full updates
+if [[ $EXP_NAME != *"onlyQ"* ]]; then
 cat << EOF
 &enkf_parameter
 numbers_en   = $NUM_ENS, 
 expername    = '$EXP_NAME',  
 enkfvar      = 'T         ', 'U         ', 'V         ', 'W         ', 'QVAPOR    ', 'QCLOUD    ', 'QRAIN     ', 'QICE      ', 'QSNOW     ', 'QGRAUP    ', 'PH        ', 'MU        ', 'PSFC      ', 'P         ', 'PHB       ', 'PB        ', 'MUB       ', 'TSK       ', 'HGT       ',
 updatevar    = 'T         ', 'U         ', 'V         ', 'W         ', 'QVAPOR    ', 'QCLOUD    ', 'QRAIN     ', 'QICE      ', 'QSNOW     ', 'QGRAUP    ', 'PH        ', 'MU        ', 'PSFC      ', 'P         ',
+EOF
+fi
+
+## Special updatevar list for onlyQ updates
+if [[ $EXP_NAME == *"onlyQ"* ]]; then
+cat << EOF
+&enkf_parameter
+numbers_en   = $NUM_ENS, 
+expername    = '$EXP_NAME',  
+enkfvar      = 'T         ', 'U         ', 'V         ', 'W         ', 'QVAPOR    ', 'QCLOUD    ', 'QRAIN     ', 'QICE      ', 'QSNOW     ', 'QGRAUP    ', 'PH        ', 'MU        ', 'PSFC      ', 'P         ', 'PHB       ', 'PB        ', 'MUB       ', 'TSK       ', 'HGT       ',
+updatevar    = 'QVAPOR    ', 'QCLOUD    ', 'QRAIN     ', 'QICE      ', 'QSNOW     ', 'QGRAUP    ',
+EOF
+fi
+
+## Other variables
+cat << EOF
 update_is    = 1,
 update_ie    = ${E_WE[$domain_id-1]},
 update_js    = 1,
 update_je    = ${E_SN[$domain_id-1]},
 update_ks    = 1,
 update_ke    = ${E_VERT[$domain_id-1]},
+use_nonlinear_enkf=.$USE_NONLINEAR_ENKF.,
+batchwise_order =.$USE_BATCHWISE_ORDER.,
+use_gmm_enkf = .$USE_GMM_ENKF.,
+max_kernel_num = $MAX_KERNEL_NUM,
+min_expanding_kernel_prior_size= $MIN_EXPANDING_KERNEL_PRIOR_SIZE,
 EOF
 
 echo "inflate      = $INFLATION_COEF,"
@@ -165,7 +184,6 @@ use_elf       = .$USE_ELF.,
 use_abei      = .$USE_ABEI.,
 /
 
-
 &microwave
 use_microwave         = .$USE_MICROWAVE.,
 datathin_microwave    = 0,
@@ -174,4 +192,5 @@ vroi_microwave        = $VROI_MICROWAVE,
 aoei_microwave        = .$USE_AOEI_MICROWAVE.,
 use_slant_path        = .$USE_SLANT_PATH.,
 /
+
 EOF

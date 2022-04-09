@@ -1,16 +1,13 @@
 #!/bin/bash
 
-###### Expanse Header #############
-#SBATCH -J run_enkf
-#SBATCH -p compute
-#SBATCH --nodes=2
-#SBATCH --ntasks-per-node=128
-#SBATCH --mem=240G
-#SBATCH -t 1:00:00
-#SBATCH -A TG-ATM090042
-#SBATCH -o run_enkf.%j.batch
-#SBATCH --export=ALL
-
+#####header for stampede2######
+#SBATCH -J CTRL
+#SBATCH -p development
+#SBATCH -N 7
+#SBATCH -n 476
+#SBATCH --time=02:00:00
+#SBATCH -o log.expt_CTRL
+#SBATCH -e err.expt_CTRL
 
 # OpenMP settings (seems to run WRF nicely)
 export OMP_NUM_THREADS=1
@@ -21,10 +18,8 @@ export OMP_PROC_BIND=spread
 source ~/.bashrc
 
 
-
 #load configuration files, functions, parameters
-homedir=`pwd`
-export CONFIG_FILE=$homedir/config/mini_test
+export CONFIG_FILE=/work2/04920/tg842199/stampede2/nonlinear_IR-DA/indian_ocean_osse/PSU_EnKF/scripts/config/CTRL
 
 . $CONFIG_FILE
 cd $SCRIPT_DIR
@@ -46,6 +41,7 @@ fi
 
 cd $WORK_DIR
 
+
 ####total_ntasks####
 if [[ $HOSTTYPE == "stampede" ]]; then
   export total_ntasks=$SLURM_NTASKS
@@ -59,9 +55,10 @@ fi
 if [[ $HOSTTYPE == "cori-login" ]]; then
   export total_ntasks=3400
 fi
-if [[ $HOSTTYPE == "expanse" ]]; then
-  export total_ntasks=$SLURM_NTASKS
+if [[ $HOSTTYPE == "cori-regular" ]]; then
+  export total_ntasks=3400
 fi
+
 
 echo total_ntasks is $total_ntasks
 #################################

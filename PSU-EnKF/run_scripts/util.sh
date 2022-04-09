@@ -154,3 +154,42 @@ function min {
   echo $j
 }
 export -f min
+
+# Function to compress netCDF4 files
+function deflate_ncfile {
+  fname=$1
+  fout="$1".copy
+  nccopy -d 1 $fname $fout
+  mv $fout $fname
+}
+export -f deflate_ncfile
+
+
+# Function to submit something to a slurm queue
+# and wait for the job to finish
+function stampede2_salloc {
+
+  # Inputs for function.
+  script=$1
+  jobname=$2
+  queue=$3
+  nnodes=$4
+  nprocs=$5
+  hhmmss=$6              # duration of job
+
+
+  # Submit job to develeopment queue
+  sbatch -p $queue -N $nnodes -n $nprocs -t $hhmmss -J $jobname $script
+  
+  # Now watch over the script that was submitted
+  flag=true
+  shortname=`echo $jobname |cut -c1-8`
+  while $flag ; do
+    if [[ `squeue -u tg842199 |grep $shortname` ]]; then
+      sleep 1m
+    else
+      flag=false
+    fi
+  done
+}
+export -f stampede2_salloc

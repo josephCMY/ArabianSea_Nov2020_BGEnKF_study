@@ -38,7 +38,7 @@ for n in $domlist; do
   if [[ ! -d $dm ]]; then mkdir -p $dm; fi
   if [ -f $dm/${DATE}.finish_flag ]; then continue; fi
   cd $dm
-  lfs setstripe -c 8 $rundir/$dm
+  lfs setstripe -c 1 $rundir/$dm
 
   echo "    Linking files for domain $dm"
 
@@ -51,9 +51,9 @@ for n in $domlist; do
     if $USE_ESTIMATE_INF; then
       cp -L $WORK_DIR/fc/$PREVDATE/wrfinput_${dm}_`wrf_time_string $DATE`_$id fort.`expr 80010 + $NE` 
 
-    ## If using ABEI (fast MPI doesnt need copying)
-    #elif $USE_ABEI; then
-    #  cp -L $WORK_DIR/fc/$PREVDATE/wrfinput_${dm}_`wrf_time_string $DATE`_$id fort.`expr 80010 + $NE` 
+    # If using ABEI
+    elif $USE_ABEI; then
+      cp -L $WORK_DIR/fc/$PREVDATE/wrfinput_${dm}_`wrf_time_string $DATE`_$id fort.`expr 80010 + $NE` 
 
     else
       ln -fs $WORK_DIR/fc/$PREVDATE/wrfinput_${dm}_`wrf_time_string $DATE`_$id fort.`expr 80010 + $NE`
@@ -83,7 +83,7 @@ for n in $domlist; do
 
   ln -fs $WRF_DIR/run/LANDUSE.TBL .
   # coefficients for CRTM
-  ln -fs $CRTM_DIR/coefficients .
+  ln -fs $CRTM_DIR/crtm_wrf/coefficients .
   # Empirical Localization Function
   #ln -fs $ELF_DIR/elf .
   #Observations

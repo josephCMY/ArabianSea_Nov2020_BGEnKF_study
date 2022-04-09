@@ -39,14 +39,14 @@ for NE in `seq -f "%03g" 1 $NUM_ENS`; do
       dm=d`expr $n + 100 |cut -c2-`
       ln -fs $WORK_DIR/fc/$DATE/wrfinput_${dm}_$id wrfinput_$dm
     done
-    ln -sf $BDY_DIR/$id/wrfbdy_d01 .
+    ln -sf $WORK_DIR/fc/$DATE/wrfbdy_d01_update_$id wrfbdy_d01
 
     if [[ $SST_UPDATE == 1 ]]; then
-      if [[ $NE == 001 ]]; then
-        cp $WORK_DIR/DA/wrflowinp_interpolate.py .
-        python3 wrflowinp_interpolate.py $BDY_DIR/$id/wrflowinp_d01 $DATE wrflowinp_d01
+      if [[ $id == 001 ]]; then
+        cp $WORK_DIR/DA/interpolate_wrflowinp.py .
+        python3 interpolate_wrflowinp.py $BDY_DIR/$id/wrflowinp_d01 $DATE wrflowinp_d01
       else
-        ln -s ../001/wrflowinp_d01
+        ln -s ../001/wrflowinp_d01 .
       fi
     fi
 
@@ -57,6 +57,7 @@ for NE in `seq -f "%03g" 1 $NUM_ENS`; do
     else
       ln -fs $WRF_DIR/run/* .
     fi
+    ln -sf $SCRIPT_DIR/Thompson_datfiles/*.dat .
     rm -f namelist.*
 
     export start_date=$start_date_cycle

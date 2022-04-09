@@ -10,20 +10,10 @@ exe=$4  # executable
 ### TACC Stampede2
 if [[ $HOSTTYPE == "stampede" ]]; then
   export SLURM_TASKS_PER_NODE="$ppn(x$SLURM_NNODES)"
+  #ibrun tacc_affinity -n $n -o $o $exe << this is the command I tried
   ibrun -n $n -o $o task_affinity $exe
   export SLURM_TASKS_PER_NODE="$((SLURM_NTASKS/$SLURM_NNODES))(x$SLURM_NNODES)"
 fi
-
-
-### XSEDE Expanse cluster
-if [[ $HOSTTYPE == "expanse" ]]; then
-  export SLURM_TASKS_PER_NODE="$ppn(x$SLURM_NNODES)"
-  module restore intel
-  ibrun -n $n -o $o $exe
-  export SLURM_TASKS_PER_NODE="$((SLURM_NTASKS/$SLURM_NNODES))(x$SLURM_NNODES)"
-  module restore default
-fi
-
 
 ### NERSC Cori
 
