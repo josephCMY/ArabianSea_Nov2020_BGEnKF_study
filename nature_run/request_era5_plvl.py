@@ -26,7 +26,7 @@ c.retrieve(
         'year': date.strftime('%Y'),
         'month': date.strftime( '%m' ),
         'day': date.strftime( '%d' ),
-        'area': [22.5, 47.5, -22.5, 102.5], 
+        'area': [22.5, 47.5, -22.5, 122.5], 
         'time': date.strftime( '%H' )
         },
    'raw_era5/era5_reanalysis_' + date.strftime('%Y-%m-%d_%H')+'UTC.grib')

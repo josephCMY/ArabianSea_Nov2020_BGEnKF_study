@@ -22,7 +22,7 @@ c.retrieve(
                     'soil_temperature_level_4','soil_type','standard_deviation_of_filtered_subgrid_orography',
                     'surface_pressure','volumetric_soil_water_layer_1','volumetric_soil_water_layer_2',
                     'volumetric_soil_water_layer_3','volumetric_soil_water_layer_4' ],
-        'area': [22.5, 47.5, -22.5, 102.5],
+        'area': [22.5, 47.5, -22.5, 122.5],
         'year':date.strftime('%Y'),
         'month':date.strftime('%m'),
         'day': date.strftime('%d'),
